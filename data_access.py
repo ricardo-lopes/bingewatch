@@ -1,5 +1,5 @@
 from boto3 import resource
-from boto3.dynamodb.conditions import Key,Attr
+from boto3.dynamodb.conditions import Key, Attr
 
 
 def __get_database():
@@ -13,20 +13,29 @@ def __get_table():
 def get_current_show(alexaid):
     table = __get_table()
     response = table.scan(
-        FilterExpression = Key('alexa_id').eq(alexaid) & Attr('watching').eq(True)
+        FilterExpression=Key('alexa_id').eq(alexaid) & Attr('watching').eq(True)
     )
     if response['Items']:
         return response['Items'][0]
-    else:
-        return None
+    return None
 
 
-def set_show_watch_status(alexaid, id, value):
+def get_all_shows(alexaid):
+    table = __get_table()
+    response = table.scan(
+        FilterExpression=Key('alexa_id').eq(alexaid)
+    )
+    if response['Items']:
+        return response['Items']
+    return None
+
+
+def set_show_watch_status(alexaid, show_id, value):
     table = __get_table()
     response = table.update_item(
         Key={
             'alexa_id': alexaid,
-            'id': id
+            'id': show_id
         },
         UpdateExpression="set watching = :w",
         ExpressionAttributeValues={
@@ -35,6 +44,29 @@ def set_show_watch_status(alexaid, id, value):
         ReturnValues="UPDATED_NEW"
     )
     return response
+
+
+def clear_table(alexaid):
+    table = __get_table()
+    shows = get_all_shows(alexaid)
+    with table.batch_writer() as batch:
+        for s in shows:
+            batch.delete_item(
+                Key={
+                    'alexa_id': s['alexa_id'],
+                    'id': s['id']
+                }
+            )
+
+
+def insert_show(alexaid, id, show_name):
+    table = __get_table()
+    show = {
+        "alexa_id": alexaid,
+        "id": id,
+        "title": show_name
+    }
+    return table.put_item(Item=show)
 
 
 def __create_table():
@@ -74,26 +106,17 @@ def __insert_data():
     seinfeld = {
         "alexa_id": "testid1",
         "id": 1,
-        "title": "seinfeld",
-        "season": 10,
-        "watching": True,
-        "lastseen": "2010-01-18T00:00:00Z"
+        "title": "seinfeld"
     }
     dexter = {
         "alexa_id": "testid1",
         "id": 2,
-        "title": "dexter",
-        "season": 4,
-        "watching": False,
-        "lastseen": "2013-01-18T00:00:00Z"
+        "title": "dexter"
     }
     wire = {
         "alexa_id": "testid1",
         "id": 3,
-        "title": "the wire",
-        "season": 1,
-        "watching": False,
-        "lastseen": None
+        "title": "the wire"
     }
     table = __get_table()
     table.put_item(Item=seinfeld)
