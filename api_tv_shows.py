@@ -21,8 +21,9 @@ def search_show(show_name):
 
 def search_shows_by_genres(genres, results_limit):
     __login()
+    genres_string = ','.join(genres)
     search_interface = Trakt['search']
-    shows = query_with_genres(search_interface, '', 'show', genres=genres, limit=results_limit, extended='full')
+    shows = query_with_genres(search_interface, '', 'show', genres=genres_string, limit=results_limit, extended='full')
     if shows:
         return shows
     return None
