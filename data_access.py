@@ -1,5 +1,5 @@
 from boto3 import resource
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key
 
 
 def __get_database():
