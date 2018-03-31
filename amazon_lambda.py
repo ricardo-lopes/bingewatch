@@ -56,7 +56,7 @@ def set_up_show(user_id, tv_show_slot):
     should_end_session = False
     result = setup_one_show(user_id, tv_show_slot)
     if result:
-        speech_output = "<speak>I have setup what you requested and sprinkled a little more</speak>"
+        speech_output = f"<speak>I have setup {result} and sprinkled a little more</speak>"
     return build_response({}, build_speechlet_response(speech_output, None, should_end_session))
 
 
@@ -65,7 +65,7 @@ def select_show(user_id):
     should_end_session = False
     show = select_a_show(user_id)
     if show:
-        speech_output = f"<speak>Hmmmmmmmmm. <break time=\"2s\"/>  I think you should watch {show}</speak>"
+        speech_output = f"<speak>Hmmmmmmmmm. <break time=\"1s\"/>  I think you should watch {show}</speak>"
     return build_response({}, build_speechlet_response(speech_output, None, should_end_session))
 
 
