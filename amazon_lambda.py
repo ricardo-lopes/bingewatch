@@ -1,5 +1,5 @@
 from __future__ import print_function
-from cosmo import setup_clear, setup_one_show, select_a_show
+from bingewatch import setup_clear, setup_one_show, select_a_show
 
 # --------------- Helpers that build all of the responses ----------------------
 

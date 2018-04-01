@@ -1,6 +1,6 @@
-# Cosmo
+# Binge watch
 Amazon lambda for recommending what tv show to watch next.
-This lambda supports the Cosmo Alexa custom skill.
+This lambda supports the Binge watch Alexa custom skill.
 
 The user can:
 - setup new shows
