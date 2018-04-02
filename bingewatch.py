@@ -30,7 +30,7 @@ def select_a_show(alexa_id):
 
 def __get_recommendations(genres, rating):
     genres_count = len(genres)
-    max_results = 30 if genres_count > 1 else 50
+    max_results = 100
     related = search_shows_by_genres(genres, max_results)
     if genres_count == 1:
         return list(__select_genre_score_match(related, genres, rating))
@@ -79,4 +79,3 @@ def __select_genre_partial_match(related, genres, hits):
 
 def __get_show_id(show):
     return int(show.keys[0][1])
-

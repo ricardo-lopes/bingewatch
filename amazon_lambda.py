@@ -32,7 +32,7 @@ def build_response(session_attributes, speechlet_response):
 
 def get_welcome_response():
     session_attributes = {}
-    speech_output = "<speak>Please ask me what to watch next or to set up a new show.</speak>"
+    speech_output = "<speak>Please ask me what to watch next or set up a new show to improve suggestions.</speak>"
     should_end_session = False
     return build_response(session_attributes,
                           build_speechlet_response(speech_output, None, should_end_session))
@@ -56,16 +56,17 @@ def set_up_show(user_id, tv_show_slot):
     should_end_session = False
     result = setup_one_show(user_id, tv_show_slot)
     if result:
-        speech_output = f"<speak>I have setup {result} and sprinkled a little more</speak>"
+        speech_output = f"<speak>I have setup " \
+                        f"{result} and sprinkled a little more. Setup more shows to improve suggestions</speak>"
     return build_response({}, build_speechlet_response(speech_output, None, should_end_session))
 
 
 def select_show(user_id):
-    speech_output = "<speak>Something went wrong. Can you try again, please?</speak>"
+    speech_output = "<speak>Something went wrong. Did you setup any show?</speak>"
     should_end_session = False
     show = select_a_show(user_id)
     if show:
-        speech_output = f"<speak>Hmmmmmmmmm. <break time=\"1s\"/>  I think you should watch {show}</speak>"
+        speech_output = f"<speak>Hmmmmmmmmm. I think you should watch {show}</speak>"
     return build_response({}, build_speechlet_response(speech_output, None, should_end_session))
 
 
