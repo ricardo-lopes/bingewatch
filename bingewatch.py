@@ -1,10 +1,10 @@
 import random
 from api_tv_shows import search_show, search_shows_by_genres
-from data_access import insert_show, clear_table, get_all_shows
+from data_access import insert_show, clear_tables, get_all_suggestions
 
 
 def setup_clear(alexa_id):
-    clear_table(alexa_id)
+    clear_tables(alexa_id)
 
 
 def setup_one_show(alexa_id, show_name):
@@ -21,7 +21,7 @@ def setup_one_show(alexa_id, show_name):
 
 
 def select_a_show(alexa_id):
-    shows = get_all_shows(alexa_id)
+    shows = get_all_suggestions(alexa_id)
     if shows:
         show = random.choice(shows)
         return show['title']
