@@ -1,31 +1,32 @@
 import random
 from api_tv_shows import search_show, search_shows_by_genres
-from data_access import insert_show, clear_tables, get_all_suggestions
+from data_access import insert_show, clear_user_data, get_all_suggestions, insert_suggestion
 
 
 def setup_clear(alexa_id):
-    clear_tables(alexa_id)
+    clear_user_data(alexa_id)
 
 
 def setup_one_show(alexa_id, show_name):
     show = search_show(show_name)
-    if show:
-        show_inserted = insert_show(alexa_id, __get_show_id(show), show.title)
-        if show_inserted:
-            filter_related = __get_recommendations(show.genres, show.rating.value)
-            for related_show in filter_related:
-                insert_show(alexa_id, __get_show_id(related_show), related_show.title)
-            return show.title
+    if not show:
         return None
-    return None
+    insert_show(alexa_id, __get_show_id(show), show.title)
+    show_inserted = insert_suggestion(alexa_id, __get_show_id(show), show.title)
+    if not show_inserted:
+        return None
+    filter_related = __get_recommendations(show.genres, show.rating.value)
+    for related_show in filter_related:
+        insert_suggestion(alexa_id, __get_show_id(related_show), related_show.title)
+    return show.title
 
 
 def select_a_show(alexa_id):
     shows = get_all_suggestions(alexa_id)
-    if shows:
-        show = random.choice(shows)
-        return show['title']
-    return None
+    if not shows:
+        return None
+    show = random.choice(shows)
+    return show['title']
 
 
 def __get_recommendations(genres, rating):
@@ -79,3 +80,4 @@ def __select_genre_partial_match(related, genres, hits):
 
 def __get_show_id(show):
     return int(show.keys[0][1])
+
