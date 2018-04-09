@@ -57,13 +57,14 @@ def set_up_show(user_id, tv_show_slot):
     result = setup_one_show(user_id, tv_show_slot)
     if result:
         speech_output = f"<speak>I have setup " \
-                        f"{result} and sprinkled a little more. Setup more shows to improve suggestions</speak>"
+                        f"{result} and sprinkled a little more. <break time=\"1s\"/>" \
+                        f"Please ask me what to watch next or set up a new show to improve suggestions.</speak>"
     return build_response({}, build_speechlet_response(speech_output, None, should_end_session))
 
 
 def select_show(user_id):
     speech_output = "<speak>Something went wrong. Did you setup any show?</speak>"
-    should_end_session = False
+    should_end_session = True
     show = select_a_show(user_id)
     if show:
         speech_output = f"<speak>Hmmmmmmmmm. I think you should watch {show}</speak>"
